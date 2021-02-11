@@ -2,12 +2,15 @@ package com.bancolombia.utest.stepdefinitions;
 
 import static com.bancolombia.utest.utils.Constants.CREATE_ACCOUNT;
 import static com.bancolombia.utest.utils.Constants.UTEST_URL;
+import static com.bancolombia.utest.utils.Generate.getLocation;
 import static com.bancolombia.utest.utils.Generate.getUser;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorCalled;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
 
 import com.bancolombia.utest.interactions.SelectMenuOption;
+import com.bancolombia.utest.models.Location;
 import com.bancolombia.utest.models.User;
+import com.bancolombia.utest.tasks.CompleteLocationInformation;
 import com.bancolombia.utest.tasks.CompleteUserInformation;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -38,7 +41,11 @@ public class CreateAccountOnUtestStepDefinition {
   @When("she indicates {string} of her personal data and devices")
   public void sheIndicatesOfHerPersonalDataAndDevices(String dataFilter) throws IOException {
     User user = getUser(dataFilter);
-    theActorInTheSpotlight().attemptsTo(CompleteUserInformation.withTheFollowingData(user));
+    Location location = getLocation(dataFilter);
+    theActorInTheSpotlight()
+        .attemptsTo(
+            CompleteUserInformation.withTheFollowingData(user),
+            CompleteLocationInformation.withTheFollowingData(location));
   }
 
   @When("she specifies the password associated with the new account")
